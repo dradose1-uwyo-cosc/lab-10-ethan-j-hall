@@ -1,6 +1,6 @@
-# Your Name Here
+# Ethan Hall
 # UWYO COSC 1010
-# Submission Date
+# 11.24.2024
 # Lab XX
 # Lab Section: 
 # Sources, people worked with, help given to: 
@@ -12,12 +12,6 @@
 
 from hashlib import sha256 
 from pathlib import Path
-
-def get_hash(to_hash):
-    """You can use """
-    return sha256(to_hash.encode('utf-8')).hexdigest().upper()
-
-
 
 # Files and Exceptions
 
@@ -43,3 +37,30 @@ def get_hash(to_hash):
 # Hash each individual password and compare it against the stored hash.
 # - When you find the match, print the plaintext version of the password.
 # - End your loop.
+
+def get_hash(to_hash):
+    return sha256(to_hash.encode('utf-8')).hexdigest().upper()
+
+try:
+    with open('hash', 'r') as file:
+        target_hash = file.read().strip()  
+except FileNotFoundError:
+    print("The file 'hash' was not found.")
+    exit()
+except Exception as e:
+    print(f"An error occurred while reading the 'hash' file: {e}")
+    exit()
+
+try:
+    with open('rockyou.txt', 'r', encoding='latin-1') as file:
+        for password in file:
+            password = password.strip()  
+            if get_hash(password) == target_hash:
+                print(f"Password found: {password}")
+                break 
+        else:
+            print("Password not found in the list.")
+except FileNotFoundError:
+    print("The file 'rockyou.txt' was not found.")
+except Exception as e:
+    print(f"An error occurred while reading the 'rockyou.txt' file: {e}")
